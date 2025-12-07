@@ -32,8 +32,15 @@ def hello():
     raw = data["slideShowData"][0]["imageArray"]
 
     # convert to numpy array, with dtype uint8
-    arr = np.array(raw, dtype=np.uint8)
-    print("arr: " + str(arr));
+    raw = data["slideShowData"][0]["imageArray"]  # flat list of RGB triples
+    arr = np.array(raw, dtype=np.uint8)             # shape = (N, 3)
+
+    # Suppose the true image dimensions are known:
+    width = 320   # example width
+    height = 240  # example height
+
+    # Reshape array to (height, width, 3)
+    arr = arr.reshape((height, width, 3))
 
     img = Image.fromarray(arr)
     img.show()
