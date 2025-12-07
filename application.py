@@ -40,7 +40,6 @@ if __name__ == '__main__':
     dictToSend = {'deviceName':'angelpi0', 'password': 'password123', 'ipAddress': IPAddr}
     res = requests.post('http://quinonesangel.com:1312/connectDevice', json=dictToSend)
     print('response from server:',res.text)
-    dictFromServer = res.json()
 
     # run the Kivy app (main GUI loop)
     MyKivyApp().run()
