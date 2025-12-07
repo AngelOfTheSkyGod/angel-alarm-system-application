@@ -29,8 +29,8 @@ print("Local IP address:", get_local_ip())
 def hello():
 
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
-    print("body: " + str(data));
     raw = data["slideShowData"][0]["imageArray"]
+    print("raw: " + str(raw));
 
     # convert to numpy array, with dtype uint8
     arr = np.array(raw, dtype=np.uint8)
