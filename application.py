@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # private String password;
     # private String ipAddress;
     dictToSend = {'deviceName':'angelpi0', 'password': 'password123', 'ipAddress': IPAddr}
-    res = requests.post('http:://quinonesangel.com:1312/connectDevice', json=dictToSend)
+    res = requests.post('http://quinonesangel.com:1312/connectDevice', json=dictToSend)
     print('response from server:',res.text)
     dictFromServer = res.json()
 
