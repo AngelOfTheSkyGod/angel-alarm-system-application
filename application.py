@@ -30,10 +30,11 @@ def hello():
 
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
     raw = data["slideShowData"][0]["imageArray"]
-    print("raw: " + str(raw));
 
     # convert to numpy array, with dtype uint8
     arr = np.array(raw, dtype=np.uint8)
+    print("arr: " + str(arr));
+
     img = Image.fromarray(arr)
     img.show()
 
