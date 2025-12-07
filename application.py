@@ -7,7 +7,8 @@ from flask import Flask, jsonify, request
 from kivy.app import App
 from kivy.config import Config
 from kivy.uix.label import Label
-
+import numpy as np
+from PIL import Image
 # Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
 # -- REST server side (Flask) --
 flask_app = Flask(__name__)
@@ -26,8 +27,12 @@ def get_local_ip():
 print("Local IP address:", get_local_ip())
 @flask_app.route('/ping', methods=['POST'])
 def hello():
+
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
     print("body: " + str(data));
+    img = Image.fromarray(data.slideShowData[0].imageArray)
+    img.show()
+
     return jsonify({"message": "ping!"})
 
 def run_server():
