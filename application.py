@@ -4,8 +4,10 @@ import threading
 
 from flask import Flask, jsonify
 from kivy.app import App
+from kivy.config import Config
 from kivy.uix.label import Label
 
+Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
 # -- REST server side (Flask) --
 flask_app = Flask(__name__)
 
