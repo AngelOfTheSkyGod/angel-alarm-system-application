@@ -27,7 +27,7 @@ print("Local IP address:", get_local_ip())
 @flask_app.route('/ping', methods=['POST'])
 def hello():
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
-    print("body: " + data);
+    print("body: " + str(data));
     return jsonify({"message": "ping!"})
 
 def run_server():
