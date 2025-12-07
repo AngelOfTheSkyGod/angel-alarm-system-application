@@ -3,7 +3,7 @@
 import socket
 import threading
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from kivy.app import App
 from kivy.config import Config
 from kivy.uix.label import Label
@@ -38,7 +38,7 @@ def run_server():
 class MyKivyApp(App):
     def build(self):
         # simple UI showing a message
-        return Label(text="Kivy GUI running — check http://localhost:5000/hello")
+        return Label(text="app")
 
 if __name__ == '__main__':
     # start the Flask server in a background thread
