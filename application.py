@@ -1,6 +1,7 @@
 # filename: kivy_with_rest.py
 
 import threading
+import socket
 
 from flask import Flask, jsonify
 from kivy.app import App
@@ -10,7 +11,8 @@ from kivy.uix.label import Label
 Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
 # -- REST server side (Flask) --
 flask_app = Flask(__name__)
-
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
 @flask_app.route('/hello', methods=['GET'])
 def hello():
     return jsonify({"message": "Hello from Flask + Kivy!"})
@@ -29,6 +31,15 @@ if __name__ == '__main__':
     # start the Flask server in a background thread
     server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
+    
+    import requests
+    #     private String deviceName;
+    # private String password;
+    # private String ipAddress;
+    dictToSend = {'deviceName':'angelpi0', 'password': 'password123', 'ipAddress': IPAddr}
+    res = requests.post('http:://quinonesangel.com:1312/connectDevice', json=dictToSend)
+    print 'response from server:',res.text
+    dictFromServer = res.json()
 
     # run the Kivy app (main GUI loop)
     MyKivyApp().run()
