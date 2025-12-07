@@ -30,7 +30,11 @@ def hello():
 
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
     print("body: " + str(data));
-    img = Image.fromarray(data["slideShowData"][0]["imageArray"])
+    raw = data["slideShowData"][0]["imageArray"]
+
+    # convert to numpy array, with dtype uint8
+    arr = np.array(raw, dtype=np.uint8)
+    img = Image.fromarray(arr)
     img.show()
 
     return jsonify({"message": "ping!"})
