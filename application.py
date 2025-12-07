@@ -11,8 +11,19 @@ from kivy.uix.label import Label
 Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
 # -- REST server side (Flask) --
 flask_app = Flask(__name__)
-hostname = socket.gethostname()
-IPAddr = socket.gethostbyname(hostname)
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # connect to a public IP (does not send data) just to get the OS to fill in the local IP
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = "127.0.0.1"
+    finally:
+        s.close()
+    return ip
+
+print("Local IP address:", get_local_ip())
 @flask_app.route('/hello', methods=['GET'])
 def hello():
     return jsonify({"message": "Hello from Flask + Kivy!"})
@@ -37,7 +48,7 @@ if __name__ == '__main__':
     #     private String deviceName;
     # private String password;
     # private String ipAddress;
-    dictToSend = {'deviceName':'angelpi0', 'password': 'password123', 'ipAddress': IPAddr}
+    dictToSend = {'deviceName':'angelpi0', 'password': 'password123', 'ipAddress': get_local_ip()}
     res = requests.post('http://quinonesangel.com:1312/connectDevice', json=dictToSend)
     print('response from server:',res.text)
 
