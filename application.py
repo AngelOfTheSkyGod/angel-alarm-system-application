@@ -30,7 +30,7 @@ def hello():
 
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
     print("body: " + str(data));
-    img = Image.fromarray(data.slideShowData[0].imageArray)
+    img = Image.fromarray(data["slideShowData"][0]["imageArray"])
     img.show()
 
     return jsonify({"message": "ping!"})
