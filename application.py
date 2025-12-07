@@ -1,7 +1,7 @@
 # filename: kivy_with_rest.py
 
-import threading
 import socket
+import threading
 
 from flask import Flask, jsonify
 from kivy.app import App
@@ -33,12 +33,13 @@ if __name__ == '__main__':
     server_thread.start()
     
     import requests
+
     #     private String deviceName;
     # private String password;
     # private String ipAddress;
     dictToSend = {'deviceName':'angelpi0', 'password': 'password123', 'ipAddress': IPAddr}
     res = requests.post('http:://quinonesangel.com:1312/connectDevice', json=dictToSend)
-    print 'response from server:',res.text
+    print('response from server:',res.text)
     dictFromServer = res.json()
 
     # run the Kivy app (main GUI loop)
