@@ -30,7 +30,7 @@ def hello():
 
 def run_server():
     # run on localhost:5000 — change host/port if needed
-    flask_app.run(host='127.0.0.1', port=80, debug=False)
+    flask_app.run(host=get_local_ip(), port=80, debug=False)
 
 # -- Kivy GUI side --
 class MyKivyApp(App):
