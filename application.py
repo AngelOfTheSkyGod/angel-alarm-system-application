@@ -24,9 +24,9 @@ def get_local_ip():
     return ip
 
 print("Local IP address:", get_local_ip())
-@flask_app.route('/hello', methods=['GET'])
+@flask_app.route('/ping', methods=['POST'])
 def hello():
-    return jsonify({"message": "Hello from Flask + Kivy!"})
+    return jsonify({"message": "ping!"})
 
 def run_server():
     # run on localhost:5000 — change host/port if needed
