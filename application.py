@@ -40,7 +40,8 @@ def hello():
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
     img = base64_to_pil(data["slideShowData"][0]["imageDataUrl"])
     print(data["slideShowData"][0]["imageDataUrl"][:100])
-    img.show()
+    img.save("received.jpg")
+    print("Saved image → received.jpg")
 
     return jsonify({"message": "ping!"})
 
