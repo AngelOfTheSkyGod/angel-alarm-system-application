@@ -13,7 +13,7 @@ from PIL import Image
 from pathlib import Path
 import os
 import requests
-import ujson
+import simplejson as json
 
 from flask_compress import Compress
 # Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
@@ -80,14 +80,8 @@ def connect():
     imageCount = count;
     response_data = {"imageCount": imageCount, "imageList": imageList}
 
-    # Convert to JSON string
-    json_str = json.dumps(response_data)
-
-    # Get size in bytes
-    size_bytes = len(json_str.encode('utf-8'))
-    print(f"Response size: {size_bytes} bytes")
-    raw_json = ujson.dumps(response_data)  # MUCH faster
-    return Response(raw_json, mimetype="application/json")
+    json_text = json.dumps(response_data)
+    return Response(json_text, mimetype="application/json")
     # # Return as usual
     # return jsonify(response_data)
 
