@@ -63,7 +63,7 @@ def hello():
 @flask_app.route('/connect', methods=['POST'])
 def connect():
     current_directory = os.getcwd()
-    path = current_directory + r'\slideShowImages' 
+    path = current_directory + r'/slideShowImages' 
     print("path", path);
     directory = Path(path)
     imageList = [];
