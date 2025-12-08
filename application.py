@@ -7,7 +7,6 @@ from flask import Flask, jsonify, request
 from kivy.app import App
 from kivy.config import Config
 from kivy.uix.label import Label
-import numpy as np
 import base64
 from io import BytesIO
 from PIL import Image
