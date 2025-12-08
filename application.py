@@ -38,7 +38,6 @@ print("Local IP address:", get_local_ip())
 def hello():
 
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
-    print("data: " , data);
     img = base64_to_pil(data["slideShowData"][0]["imageDataUrl"])
     img.show()
 
