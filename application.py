@@ -3,7 +3,7 @@
 import socket
 import threading
 
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify, request, stream_with_context
 from kivy.app import App
 from kivy.config import Config
 from kivy.uix.label import Label
@@ -44,6 +44,13 @@ def image_to_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode("utf-8")
     
+def generate(response_data):
+    # Serialize in chunks — e.g. chunk‑size = 4096 bytes
+    json_str = json.dumps(response_data)
+    chunk_size = 4096
+    for i in range(0, len(json_str), chunk_size):
+        yield json_str[i:i+chunk_size]
+
 print("Local IP address:", get_local_ip())
 @flask_app.route('/ping', methods=['POST'])
 def hello():
@@ -80,8 +87,8 @@ def connect():
     imageCount = count;
     response_data = {"imageCount": imageCount, "imageList": imageList}
 
-    json_text = json.dumps(response_data)
-    return Response(json_text, mimetype="application/json")
+    return Response(stream_with_context(generate(response_data)),
+                    mimetype='application/json')
     # # Return as usual
     # return jsonify(response_data)
 
