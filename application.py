@@ -69,7 +69,7 @@ def hello():
 
     return jsonify({"message": "ping!"})
 
-@flask_app.route('/connect', methods=['POST'])
+@flask_app.route('/connect', methods=['GET'])
 def connect():
     current_directory = os.getcwd()
     path = current_directory + r'/slideShowImages' 
