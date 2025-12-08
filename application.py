@@ -69,7 +69,7 @@ def connect():
     imageList = [];
     count = 0;
     for entry in directory.iterdir():
-        if (count >= 1):
+        if (count >= 3):
             break;
         if entry.is_file():
             count += 1;
