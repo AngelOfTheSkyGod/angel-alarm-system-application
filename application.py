@@ -3,7 +3,7 @@
 import socket
 import threading
 
-from flask import Flask, jsonify, request
+from flask import Flask, Response, jsonify, request
 from kivy.app import App
 from kivy.config import Config
 from kivy.uix.label import Label
@@ -13,7 +13,8 @@ from PIL import Image
 from pathlib import Path
 import os
 import requests
-import json
+import ujson
+
 from flask_compress import Compress
 # Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
 imageCount = 0
@@ -85,9 +86,10 @@ def connect():
     # Get size in bytes
     size_bytes = len(json_str.encode('utf-8'))
     print(f"Response size: {size_bytes} bytes")
-
-    # Return as usual
-    return jsonify(response_data)
+    raw_json = ujson.dumps(response_data)  # MUCH faster
+    return Response(raw_json, mimetype="application/json")
+    # # Return as usual
+    # return jsonify(response_data)
 
 def run_server():
     # run on localhost:5000 — change host/port if needed
