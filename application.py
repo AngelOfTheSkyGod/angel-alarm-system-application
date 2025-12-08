@@ -14,6 +14,7 @@ from PIL import Image
 from pathlib import Path
 import os
 import requests
+import json
 # Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
 
 imageCount = 0
