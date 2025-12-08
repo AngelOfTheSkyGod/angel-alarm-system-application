@@ -78,7 +78,7 @@ def connect():
     imageList = [];
     count = 0;
     for entry in directory.iterdir():
-        if (count >= 2):
+        if (count >= 3):
             break;
         if entry.is_file():
             count += 1;
@@ -89,8 +89,6 @@ def connect():
 
     return Response(stream_with_context(generate(response_data)),
                     mimetype='application/json')
-    # # Return as usual
-    # return jsonify(response_data)
 
 def run_server():
     # run on localhost:5000 — change host/port if needed
