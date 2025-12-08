@@ -14,11 +14,12 @@ from pathlib import Path
 import os
 import requests
 import json
+from flask_compress import Compress
 # Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
 imageCount = 0
 # -- REST server side (Flask) --
 flask_app = Flask(__name__)
-
+Compress(flask_app)
 def get_local_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
