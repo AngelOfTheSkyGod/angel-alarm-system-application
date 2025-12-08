@@ -76,7 +76,17 @@ def connect():
             imageList.append(image_to_base64(entry.absolute()))
             print("File:", entry)
     imageCount = count;
-    return jsonify({"imageCount": imageCount, "imageList": imageList})
+    response_data = {"imageCount": imageCount, "imageList": imageList}
+
+    # Convert to JSON string
+    json_str = json.dumps(response_data)
+
+    # Get size in bytes
+    size_bytes = len(json_str.encode('utf-8'))
+    print(f"Response size: {size_bytes} bytes")
+
+    # Return as usual
+    return jsonify(response_data)
 
 def run_server():
     # run on localhost:5000 — change host/port if needed
