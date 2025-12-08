@@ -11,7 +11,12 @@ import numpy as np
 import base64
 from io import BytesIO
 from PIL import Image
+from pathlib import Path
+import os
+import requests
 # Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
+
+imageCount = 0
 # -- REST server side (Flask) --
 flask_app = Flask(__name__)
 def get_local_ip():
@@ -33,11 +38,20 @@ def base64_to_pil(base64_string):
     image_bytes = base64.b64decode(base64_string)
     return Image.open(BytesIO(image_bytes))
 
+def image_to_base64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+    
 print("Local IP address:", get_local_ip())
 @flask_app.route('/ping', methods=['POST'])
 def hello():
 
-    data = request.get_json(silent=True)  # returns a dict if JSON, else None
+    # returns a dict if JSON, else None
+    data = request.get_json(silent=True)
+    current_directory = os.getcwd()
+    newpath = current_directory + r'\slideShowImages' 
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
     img = base64_to_pil(data["slideShowData"][0]["imageDataUrl"])
     print(data["slideShowData"][0]["imageDataUrl"][:100])
     img_700 = img.resize((700, 700))
@@ -45,6 +59,23 @@ def hello():
     print("Saved image → received.jpg")
 
     return jsonify({"message": "ping!"})
+
+@flask_app.route('/connect', methods=['POST'])
+def connect():
+    current_directory = os.getcwd()
+    path = current_directory + r'\slideShowImages' 
+    directory = Path(path)
+    imageList = [];
+    count = 0;
+    for entry in directory.iterdir():
+        if (count >= 3):
+            break;
+        if entry.is_file():
+            count += 1;
+            imageList.append(image_to_base64(entry.absolute()))
+            print("File:", entry)
+    imageCount = count;
+    return jsonify({"imageCount": imageCount, "imageList": imageList})
 
 def run_server():
     # run on localhost:5000 — change host/port if needed
@@ -60,12 +91,10 @@ if __name__ == '__main__':
     # start the Flask server in a background thread
     server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
-    
-    import requests
-
-    #     private String deviceName;
-    # private String password;
-    # private String ipAddress;
+    current_directory = os.getcwd()
+    path = current_directory + r'\slideShowImages' 
+    if not os.path.exists(path):
+        os.makedirs(path)
     dictToSend = {'deviceName':'angelpi0', 'password': 'password123', 'ipAddress': get_local_ip()}
     res = requests.post('http://quinonesangel.com:1312/connectDevice', json=dictToSend)
     print('response from server:',res.text)
