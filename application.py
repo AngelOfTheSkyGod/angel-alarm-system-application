@@ -64,6 +64,7 @@ def hello():
 def connect():
     current_directory = os.getcwd()
     path = current_directory + r'\slideShowImages' 
+    print("path", path);
     directory = Path(path)
     imageList = [];
     count = 0;
