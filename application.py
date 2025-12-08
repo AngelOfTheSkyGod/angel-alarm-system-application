@@ -8,6 +8,8 @@ from kivy.app import App
 from kivy.config import Config
 from kivy.uix.label import Label
 import numpy as np
+import base64
+from io import BytesIO
 from PIL import Image
 # Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
 # -- REST server side (Flask) --
@@ -24,25 +26,19 @@ def get_local_ip():
         s.close()
     return ip
 
+def base64_to_pil(base64_string):
+    if base64_string.startswith("data:"):
+        base64_string = base64_string.split(",")[1]
+
+    image_bytes = base64.b64decode(base64_string)
+    return Image.open(BytesIO(image_bytes))
+
 print("Local IP address:", get_local_ip())
 @flask_app.route('/ping', methods=['POST'])
 def hello():
 
     data = request.get_json(silent=True)  # returns a dict if JSON, else None
-    raw = data["slideShowData"][0]["imageArray"]
-
-    # convert to numpy array, with dtype uint8
-    raw = data["slideShowData"][0]["imageArray"]  # flat list of RGB triples
-    arr = np.array(raw, dtype=np.uint8)             # shape = (N, 3)
-
-    # Suppose the true image dimensions are known:
-    width = 320   # example width
-    height = 240  # example height
-
-    # Reshape array to (height, width, 3)
-    arr = arr.reshape((height, width, 3))
-
-    img = Image.fromarray(arr)
+    img = base64_to_pil(data["imageDataUrl"])
     img.show()
 
     return jsonify({"message": "ping!"})
