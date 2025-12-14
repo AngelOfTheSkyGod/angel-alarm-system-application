@@ -52,12 +52,19 @@ def generate(response_data):
     for i in range(0, len(json_str), chunk_size):
         yield json_str[i:i+chunk_size]
         
+def getSortedFiles(directory):
+    return sorted(
+        directory.iterdir(),
+        key=lambda f: f.stat().st_mtime
+    );
+    
 def countImageFiles(directory):
     count = 0;
     for entry in directory.iterdir():
         if entry.is_file():
             count += 1;
     return count
+
 print("Local IP address:", get_local_ip())
 @flask_app.route('/ping', methods=['POST'])
 def hello():
@@ -84,11 +91,7 @@ def connect():
     directory = Path(path)
     imageList = [];
     count = 0;
-    files = sorted(
-        directory.iterdir(),
-        key=lambda f: f.stat().st_mtime
-    )
-    for entry in files:
+    for entry in getSortedFiles(directory):
         if (count >= 3):
             break;
         if entry.is_file():
@@ -102,7 +105,6 @@ def connect():
 
 @flask_app.route('/addImage', methods=['POST'])
 def addImage():
-    
     data = request.get_json(silent=True)
     current_directory = os.getcwd()
     path = current_directory + r'/slideShowImages' 
@@ -117,6 +119,28 @@ def addImage():
     print("is success: ", success, " path: " , path, "name: " , image_name);
     response_data = {"imageCount": imageCount, "success": success}
     return jsonify(response_data)
+
+@flask_app.route('/deleteImage', methods=['POST'])
+def deleteImage():
+    data = request.get_json(silent=True)
+    current_directory = os.getcwd()
+    path = current_directory + r'/slideShowImages' 
+    directory = Path(path)
+    initialCount = countImageFiles(directory);
+    imagePosition = data["imagePosition"];
+    files = getSortedFiles(directory);
+    imagePositionError = False;
+    if 0 <= imagePosition < len(files):
+        files[imagePosition].unlink()   # delete file
+        print(f"Deleted: {files[imagePosition].name}")
+    else:
+        imagePositionError = True;
+    imageCount = countImageFiles(directory);
+    success = imageCount > initialCount and imagePositionError;
+    print("is success: ", success, " path: " , path, "position: " , imagePosition);
+    response_data = {"imageCount": imageCount, "success": success}
+    return jsonify(response_data)
+
 
 
 def run_server():
