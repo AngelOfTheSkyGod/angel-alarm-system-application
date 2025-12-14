@@ -84,7 +84,11 @@ def connect():
     directory = Path(path)
     imageList = [];
     count = 0;
-    for entry in directory.iterdir():
+    files = sorted(
+        directory.iterdir(),
+        key=lambda f: f.stat().st_mtime
+    )
+    for entry in files:
         if (count >= 3):
             break;
         if entry.is_file():
