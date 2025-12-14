@@ -112,9 +112,7 @@ def addImage():
     success = imageCount > initialCount;
     print("is success: ", success, " path: " , path, "name: " , image_name);
     response_data = {"imageCount": imageCount, "success": success}
-
-    return Response(stream_with_context(generate(response_data)),
-                    mimetype='application/json')
+    return jsonify(response_data)
 
 
 def run_server():
