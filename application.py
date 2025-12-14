@@ -53,6 +53,7 @@ def generate(response_data):
         yield json_str[i:i+chunk_size]
         
 def countImageFiles(directory):
+    count = 0;
     for entry in directory.iterdir():
         if entry.is_file():
             count += 1;
