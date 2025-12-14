@@ -57,6 +57,7 @@ def countImageFiles(directory):
     for entry in directory.iterdir():
         if entry.is_file():
             count += 1;
+    return count
 print("Local IP address:", get_local_ip())
 @flask_app.route('/ping', methods=['POST'])
 def hello():
