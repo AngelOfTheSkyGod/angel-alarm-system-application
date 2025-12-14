@@ -99,11 +99,11 @@ def connect():
 def addImage():
     
     data = request.get_json(silent=True)
+    directory = Path(path)
     initialCount = countImageFiles(directory);
     img = base64_to_pil(data["imageDataUrl"])
     current_directory = os.getcwd()
     path = current_directory + r'/slideShowImages' 
-    directory = Path(path)
     imageName = datetime.now().strftime("%Y-%m-%d %H:%M:%S");
     img_path = os.path.join("slideShowImages", imageName)
     img.save(img_path)
