@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 import requests
 import simplejson as json
+from datetime import datetime
 
 from flask_compress import Compress
 # Config.set('graphics', 'fullscreen', 'auto')  # use 'auto' to match display resolution
@@ -50,7 +51,11 @@ def generate(response_data):
     chunk_size = 4096
     for i in range(0, len(json_str), chunk_size):
         yield json_str[i:i+chunk_size]
-
+        
+def countImageFiles(directory):
+    for entry in directory.iterdir():
+        if entry.is_file():
+            count += 1;
 print("Local IP address:", get_local_ip())
 @flask_app.route('/ping', methods=['POST'])
 def hello():
@@ -81,14 +86,34 @@ def connect():
         if (count >= 3):
             break;
         if entry.is_file():
-            count += 1;
             imageList.append(image_to_base64(entry.absolute()))
             print("File:", entry)
-    imageCount = count;
+    imageCount = countImageFiles(directory);
     response_data = {"imageCount": imageCount, "imageList": imageList}
 
     return Response(stream_with_context(generate(response_data)),
                     mimetype='application/json')
+
+@flask_app.route('/addImage', methods=['POST'])
+def addImage():
+    
+    data = request.get_json(silent=True)
+    initialCount = countImageFiles(directory);
+    img = base64_to_pil(data["imageDataUrl"])
+    current_directory = os.getcwd()
+    path = current_directory + r'/slideShowImages' 
+    directory = Path(path)
+    imageName = datetime.now().strftime("%Y-%m-%d %H:%M:%S");
+    img_path = os.path.join("slideShowImages", imageName)
+    img.save(img_path)
+    imageCount = countImageFiles(directory);
+    success = imageCount > initialCount;
+    print("is success: " + success, " path: " , path, "name: " , imageName);
+    response_data = {"imageCount": imageCount, "success": success}
+
+    return Response(stream_with_context(generate(response_data)),
+                    mimetype='application/json')
+
 
 def run_server():
     # run on localhost:5000 — change host/port if needed
