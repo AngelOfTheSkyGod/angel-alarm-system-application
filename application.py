@@ -105,12 +105,12 @@ def addImage():
     directory = Path(path)
     initialCount = countImageFiles(directory);
     img = base64_to_pil(data["imageDataUrl"])
-    imageName = datetime.now().strftime("%Y-%m-%d %H:%M:%S");
-    img_path = os.path.join("slideShowImages", imageName)
+    image_name = datetime.now().strftime("%Y%m%d_%H%M%S") + ".png"
+    img_path = os.path.join("slideShowImages", image_name)
     img.save(img_path)
     imageCount = countImageFiles(directory);
     success = imageCount > initialCount;
-    print("is success: " + success, " path: " , path, "name: " , imageName);
+    print("is success: " + success, " path: " , path, "name: " , image_name);
     response_data = {"imageCount": imageCount, "success": success}
 
     return Response(stream_with_context(generate(response_data)),
