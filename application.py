@@ -97,6 +97,7 @@ def connect():
         if entry.is_file():
             imageList.append(image_to_base64(entry.absolute()))
             print("File:", entry)
+            count += 1;
     imageCount = countImageFiles(directory);
     response_data = {"imageCount": imageCount, "imageList": imageList}
 
