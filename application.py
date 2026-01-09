@@ -85,6 +85,12 @@ def hello():
 
 @flask_app.route('/connect', methods=['GET'])
 def connect():
+    response_data = {
+    "alarmData": [], "calendarData": []}
+    return jsonify(response_data)
+
+@flask_app.route('/connectSlideShow', methods=['GET'])
+def connectSlideShow():
     current_directory = os.getcwd()
     path = current_directory + r'/slideShowImages' 
     print("path", path);
